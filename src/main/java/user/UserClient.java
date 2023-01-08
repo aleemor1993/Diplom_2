@@ -46,35 +46,13 @@ public class UserClient {
                 .get(USER).then().log().all();
     }
 
-    public ValidatableResponse changeUserNameSuccessfully(String accessToken, String newName){
+    public ValidatableResponse changeUserInfoSuccessfully(String field, String accessToken, String newName){
         return given()
                 .log().all()
                 .header("Content-type", "application/json")
                 .header("Authorization", accessToken)
                 .baseUri(BASE_URI)
-                .body(String.format("{\"name\": \"%s\"}", newName))
-                .when()
-                .patch(USER).then().log().all();
-    }
-
-    public ValidatableResponse changeUserPasswordSuccessfully(String accessToken, String newPassword){
-        return given()
-                .log().all()
-                .header("Content-type", "application/json")
-                .header("Authorization", accessToken)
-                .baseUri(BASE_URI)
-                .body(String.format("{\"password\": \"%s\"}", newPassword))
-                .when()
-                .patch(USER).then().log().all();
-    }
-
-    public ValidatableResponse changeUserEmailSuccessfully(String accessToken, String newEmail){
-        return given()
-                .log().all()
-                .header("Content-type", "application/json")
-                .header("Authorization", accessToken)
-                .baseUri(BASE_URI)
-                .body(String.format("{\"email\": \"%s\"}", newEmail))
+                .body(String.format("{\"" + field + "\": \"%s\"}", newName))
                 .when()
                 .patch(USER).then().log().all();
     }
@@ -89,6 +67,17 @@ public class UserClient {
                 .when()
                 .delete(USER).then().log().all();
     }
+
+    public ValidatableResponse changeFieldWithoutToken(String field, String newValue){
+        return given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .baseUri(BASE_URI)
+                .body(String.format("{\"" + field + "\": \"%s\"}", newValue))
+                .when()
+                .patch(USER).then().log().all();
+    }
+
 
 
 

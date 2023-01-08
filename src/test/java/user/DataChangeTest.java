@@ -20,6 +20,11 @@ public class DataChangeTest {
 
     private String accessToken;
 
+    private final String EXPIRED_TOKEN =
+            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYmIxMzZiYzE2MWRhMDAxYjdhNWZiMCIsImlhdCI6MTY3MzIwNTMxMSwiZXhwIjoxNjczMjA2NTExfQ.VJ7RBlRdbH0_sDBHx3EXhdInrR4kOCD0SnzCA8iFyOc";
+
+    private final String INVALID_TOKEN = "Bearer 1";
+
     @Before
     public void registerUser(){
         RegisterUser registerUser = generator.random();
@@ -31,7 +36,6 @@ public class DataChangeTest {
 
     }
 
-
     @Test
     public void getUserInfoSuccessfully(){
 
@@ -41,7 +45,7 @@ public class DataChangeTest {
     @Test
     public void changeNameSuccessfully(){
 
-        client.changeUserNameSuccessfully(accessToken, "Джон Лето Сноу Первый");
+        client.changeUserInfoSuccessfully("name", accessToken, "Джон Лето Сноу Первый");
 
         ValidatableResponse response = client.getUserInfo(accessToken);
 
@@ -52,9 +56,11 @@ public class DataChangeTest {
     @Test
     public void changePasswordSuccessfully(){
 
-        client.changeUserPasswordSuccessfully(accessToken, "123456");
+        client.changeUserInfoSuccessfully("password", accessToken, "123456");
 
         loginUser.setPassword("123456");
+
+        //TODO не хватает проверки на ответ
 
         ValidatableResponse response = client.login(loginUser);
 
@@ -65,8 +71,9 @@ public class DataChangeTest {
     public void changeEmailSuccessfully(){
 
         String newEmail = generator.getNewEmail(loginUser.getEmail());
-        client.changeUserEmailSuccessfully(accessToken, newEmail);
+        client.changeUserInfoSuccessfully("email",accessToken, newEmail);
 
+        //TODO не хватает проверки на ответ
         loginUser.setEmail(newEmail);
 
         ValidatableResponse response = client.login(loginUser);
@@ -74,6 +81,77 @@ public class DataChangeTest {
         check.loggedInSuccessfully(response, loginUser);
 
     }
+
+    //TODO попробовать обновить сразу три поля
+
+    @Test
+    public void changeNameWithoutToken(){
+
+        ValidatableResponse response = client.changeFieldWithoutToken("name", "Джон Лето Сноу Первый");
+
+        check.changeWithoutToken(response);
+
+    }
+
+    @Test
+    public void changeEmailWithoutToken(){
+
+        ValidatableResponse response = client.changeFieldWithoutToken
+                ("email", generator.getNewEmail(loginUser.getEmail()));
+
+        check.changeWithoutToken(response);
+
+    }
+
+    @Test
+    public void changePasswordWithoutToken(){
+
+        ValidatableResponse response = client.changeFieldWithoutToken("password", "555555");
+
+        check.changeWithoutToken(response);
+
+    }
+
+    @Test
+    public void changeNameWithExpiredToken(){
+
+        ValidatableResponse response = client.changeUserInfoSuccessfully
+                ("name", EXPIRED_TOKEN, "Джон Лето Сноу Первый");
+
+        check.changeWithTokenExpired(response);
+
+    }
+
+    @Test
+    public void changeEmailWithExpiredToken(){
+
+        ValidatableResponse response = client.changeUserInfoSuccessfully
+                ("email", EXPIRED_TOKEN, generator.getNewEmail(loginUser.getEmail()));
+
+        check.changeWithTokenExpired(response);
+
+    }
+
+    @Test
+    public void changePasswordWithExpiredToken(){
+
+        ValidatableResponse response = client.changeUserInfoSuccessfully
+                ("password", EXPIRED_TOKEN, "555555");
+
+        check.changeWithTokenExpired(response);
+
+    }
+
+    @Test
+    public void changeNameWithInvalidToken(){
+
+        ValidatableResponse response = client.changeUserInfoSuccessfully
+                ("name", INVALID_TOKEN, "Джон Лето Сноу Первый");
+
+        check.changeWithTokenInvalid(response);
+
+    }
+
 
     @After
     public void deleteUser(){
