@@ -3,8 +3,7 @@ package order;
 import io.restassured.response.ValidatableResponse;
 
 import static constants.StatusCodes.*;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.hamcrest.CoreMatchers.*;
 
 public class OrderAssertions {
 
@@ -37,6 +36,20 @@ public class OrderAssertions {
 
         response.log().all().assertThat().statusCode(INTERNAL_SERVER_ERROR);
 
+    }
+
+    public void getUserOrdersSuccessfully(ValidatableResponse response){
+
+        response.log().all().assertThat().body("success", equalTo(true))
+                .and().body(containsString("orders"))
+                .and().statusCode(OK);
+
+    }
+
+    public ValidatableResponse getUserOrdersWithoutToken(ValidatableResponse response) {
+        return response.log().all().assertThat().body("success", equalTo(false))
+                .and().body("message", equalTo("You should be authorised"))
+                .and().statusCode(UNAUTHORIZED);
     }
 
 }

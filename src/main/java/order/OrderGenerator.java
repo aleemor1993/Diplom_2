@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import static constants.order.Ingredients.*;
+import static constants.Ingredients.*;
 
 public class OrderGenerator {
 

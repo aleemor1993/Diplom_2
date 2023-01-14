@@ -42,6 +42,25 @@ public class OrderClient {
                 .post(ORDER).then().log().all();
     }
 
+    public ValidatableResponse getUserOrders(String accessToken){
+        return given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .header("Authorization", accessToken)
+                .baseUri(BASE_URI)
+                .when()
+                .get(ORDER).then().log().all();
+    }
+
+    public ValidatableResponse getUserOrdersWithoutToken(){
+        return given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .baseUri(BASE_URI)
+                .when()
+                .get(ORDER).then().log().all();
+    }
+
 
 
 
