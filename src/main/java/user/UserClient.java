@@ -6,12 +6,11 @@ import user.requests.RegisterUser;
 
 import static io.restassured.RestAssured.given;
 
-public class UserClient {
+public class UserClient{
 
     protected final String BASE_URI = "https://stellarburgers.nomoreparties.site";
     protected final String LOGIN = "/api/auth/login";
     protected final String REGISTRATION = "/api/auth/register";
-
     protected final String USER = "/api/auth/user";
 
 
@@ -77,8 +76,4 @@ public class UserClient {
                 .when()
                 .patch(USER).then().log().all();
     }
-
-
-
-
 }

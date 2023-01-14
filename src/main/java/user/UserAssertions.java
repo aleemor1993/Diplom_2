@@ -6,7 +6,7 @@ import user.requests.RegisterUser;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.notNullValue;
-import static user.constants.StatusCodes.*;
+import static constants.StatusCodes.*;
 
 public class UserAssertions {
 

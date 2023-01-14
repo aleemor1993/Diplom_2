@@ -7,7 +7,7 @@ import java.util.Random;
 
 public class UserGenerator {
 
-    public RegisterUser generic(){
+    public RegisterUser genericRegister(){
         return new RegisterUser("alexandra.morkvina@yandex.ru", "111111", "Александра Александрова");
     }
 
@@ -24,5 +24,6 @@ public class UserGenerator {
     public String getNewEmail(String email) {
 
         return email + new Random().nextInt(200);
+
     }
 }

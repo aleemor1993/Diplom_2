@@ -27,7 +27,7 @@ public class RegisterTest {
     @Test
     public void registerExistingUser(){
 
-        RegisterUser registerUser = generator.generic();
+        RegisterUser registerUser = generator.genericRegister();
         ValidatableResponse response = client.register(registerUser);
 
         check.registerForbidden(response);
