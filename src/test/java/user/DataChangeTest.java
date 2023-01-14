@@ -45,9 +45,11 @@ public class DataChangeTest {
     @Test
     public void changeNameSuccessfully(){
 
-        client.changeUserInfoSuccessfully("name", accessToken, "Джон Лето Сноу Первый");
+        ValidatableResponse response = client.changeUserInfoSuccessfully("name", accessToken, "Джон Лето Сноу Первый");
 
-        ValidatableResponse response = client.getUserInfo(accessToken);
+        check.changeUserInfoSuccessfully(response, "name", "Джон Лето Сноу Первый");
+
+        response = client.getUserInfo(accessToken);
 
         Assert.assertEquals("Джон Лето Сноу Первый", check.getUserNameSuccessfully(response));
 
@@ -60,8 +62,6 @@ public class DataChangeTest {
 
         loginUser.setPassword("123456");
 
-        //TODO не хватает проверки на ответ
-
         ValidatableResponse response = client.login(loginUser);
 
         check.loggedInSuccessfully(response, loginUser);
@@ -71,18 +71,17 @@ public class DataChangeTest {
     public void changeEmailSuccessfully(){
 
         String newEmail = generator.getNewEmail(loginUser.getEmail());
-        client.changeUserInfoSuccessfully("email",accessToken, newEmail);
+        ValidatableResponse response = client.changeUserInfoSuccessfully("email",accessToken, newEmail);
 
-        //TODO не хватает проверки на ответ
+        check.changeUserInfoSuccessfully(response, "email", newEmail);
+
         loginUser.setEmail(newEmail);
 
-        ValidatableResponse response = client.login(loginUser);
+        response = client.login(loginUser);
 
         check.loggedInSuccessfully(response, loginUser);
 
     }
-
-    //TODO попробовать обновить сразу три поля
 
     @Test
     public void changeNameWithoutToken(){

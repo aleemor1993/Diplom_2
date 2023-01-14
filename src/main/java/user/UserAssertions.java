@@ -79,6 +79,13 @@ public class UserAssertions {
                 .and().statusCode(ACCEPTED);
     }
 
+    public ValidatableResponse changeUserInfoSuccessfully(ValidatableResponse response, String field, String newValue){
+        return response.log().all().assertThat().body("success", equalTo(true))
+                .and().body("user." + field, equalTo(newValue))
+                .and().statusCode(OK);
+    }
+
+
     public ValidatableResponse changeWithoutToken(ValidatableResponse response) {
         return response.log().all().assertThat().body("success", equalTo(false))
                 .and().body("message", equalTo("You should be authorised"))
