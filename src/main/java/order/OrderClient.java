@@ -2,6 +2,8 @@ package order;
 
 import io.restassured.response.ValidatableResponse;
 import order.requests.Ingredients;
+import order.responses.ingredients.IngredientsList;
+import order.responses.orders.get.UserOrders;
 
 import static io.restassured.RestAssured.given;
 
@@ -11,15 +13,39 @@ public class OrderClient {
     protected final String GET_INGREDIENTS = "/api/ingredients";
     protected final String ORDER = "/api/orders";
 
-//TODO удалить, если не придумаю рефакторинга через получение списка ингредиентов
-    public ValidatableResponse getIngredients(){
-        return given()
+    protected final String GET_ALL_ORDERS = "/api/orders/all";
+
+    //получение списка валидных ингредиентов
+    public IngredientsList getIngredients(){
+        return  given()
                 .log().all()
                 .header("Content-type", "application/json")
                 .baseUri(BASE_URI)
                 .when()
-                .get(GET_INGREDIENTS).then().log().all();
+                .log().all().get(GET_INGREDIENTS).body().as(IngredientsList.class);
     }
+
+    //получение списка 50 последних заказов всех пользователей
+    public UserOrders getAllUsersOrders(){
+        return  given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .baseUri(BASE_URI)
+                .when()
+                .log().all().get(GET_ALL_ORDERS).body().as(UserOrders.class);
+    }
+
+    public UserOrders getOrders(String accessToken){
+        return given()
+                .log().all()
+                .header("Content-type", "application/json")
+                .header("Authorization", accessToken)
+                .baseUri(BASE_URI)
+                .when()
+                .log().all().get(ORDER).body().as(UserOrders.class);
+    }
+
+
 
     public ValidatableResponse makeOrder(String accessToken, Ingredients order){
         return given()
@@ -60,8 +86,5 @@ public class OrderClient {
                 .when()
                 .get(ORDER).then().log().all();
     }
-
-
-
 
 }

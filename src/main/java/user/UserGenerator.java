@@ -8,7 +8,7 @@ import java.util.Random;
 public class UserGenerator {
 
     public RegisterUser genericRegister(){
-        return new RegisterUser("alexandra.morkvina@yandex.ru", "111111", "Александра Александрова");
+        return new RegisterUser("johnnletit169snow@yandex.ru", "111111", "Александра Александрова");
     }
 
     public RegisterUser random(){
@@ -18,7 +18,7 @@ public class UserGenerator {
 
     public LoginUser genericLogin(){
 
-        return new LoginUser("alexandra.morkvina@yandex.ru", "111111");
+        return new LoginUser("johnnletit169snow@yandex.ru", "111111");
     }
 
     public String getNewEmail(String email) {

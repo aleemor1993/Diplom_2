@@ -85,7 +85,6 @@ public class UserAssertions {
                 .and().statusCode(OK);
     }
 
-
     public ValidatableResponse changeWithoutToken(ValidatableResponse response) {
         return response.log().all().assertThat().body("success", equalTo(false))
                 .and().body("message", equalTo("You should be authorised"))

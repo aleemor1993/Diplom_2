@@ -1,11 +1,16 @@
 package order;
 
 import io.restassured.response.ValidatableResponse;
+import order.responses.ingredients.Ingredient;
+import order.responses.ingredients.IngredientsList;
 import org.junit.Test;
 import user.UserAssertions;
 import user.UserClient;
 import user.UserGenerator;
 import user.requests.LoginUser;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetUserOrders {
 

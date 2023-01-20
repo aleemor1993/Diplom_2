@@ -1,40 +1,13 @@
 package order;
 
 import order.requests.Ingredients;
+import order.responses.ingredients.Ingredient;
+import order.responses.ingredients.IngredientsList;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
-import static constants.Ingredients.*;
 
 public class OrderGenerator {
-
-    public String getBun(){
-        return BUNS[new Random().nextInt(2)];
-    }
-
-    public String getFilling(){
-        return FILLINGS[new Random().nextInt(2)];
-    }
-
-    public String getSauce(){
-        return SAUCES[new Random().nextInt(2)];
-    }
-
-    public String getWrong(){
-        return WRONG_HASH[0];
-    }
-
-
-    public Ingredients genericRandomOrder(){
-
-        List<String> order = new ArrayList<>();
-        order.add(getBun());
-        order.add(getFilling());
-        order.add(getSauce());
-        return new Ingredients(order);
-    }
 
     public Ingredients genericEmptyOrder(){
 
@@ -45,7 +18,42 @@ public class OrderGenerator {
     public Ingredients genericWrongHashOrder(){
 
         List<String> order = new ArrayList<>();
-        order.add(getWrong());
+        order.add("5");
         return new Ingredients(order);
     }
+
+    //получение списка валидных ингредиентов для бургера через запрос к ручке /api/ingredients
+    public Ingredients getListOfIngredients(){
+
+        OrderClient orderClient = new OrderClient();
+
+        IngredientsList ingredientsList = orderClient.getIngredients();
+
+        List<String> ing = new ArrayList<>();
+
+        int bun = 0;
+        int main = 0;
+        int sauce = 0;
+
+        //добавление 3х валидных ингредиентов для бургера из ответа
+        for (Ingredient ingredients: ingredientsList.getData()){
+
+            if ("bun".equals(ingredients.getType()) && bun == 0){
+                ing.add(ingredients.get_id());
+                bun += 1;
+            }
+            if ("main".equals(ingredients.getType()) && main == 0){
+                ing.add(ingredients.get_id());
+                main += 1;
+            }
+            if ("sauce".equals(ingredients.getType()) && sauce == 0){
+                ing.add(ingredients.get_id());
+                sauce += 1;
+            }
+            if (bun > 0 && main > 0 && sauce > 0) break;
+        }
+
+        return new Ingredients(ing);
+    }
+
 }

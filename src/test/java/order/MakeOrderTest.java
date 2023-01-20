@@ -1,6 +1,9 @@
 package order;
 
 import io.restassured.response.ValidatableResponse;
+import order.requests.Ingredients;
+import order.responses.orders.get.UserOrders;
+import org.junit.Assert;
 import org.junit.Test;
 import user.UserAssertions;
 import user.UserClient;
@@ -37,7 +40,7 @@ public class MakeOrderTest {
         accessToken = userCheck.getValidAccessToken(userClient.login(loginUser));
 
         //создание заказа
-        response = orderClient.makeOrder(accessToken, orderGenerator.genericRandomOrder());
+        response = orderClient.makeOrder(accessToken, orderGenerator.getListOfIngredients());
 
         //проверка успешного создания
         orderCheck.orderMadeSuccessfully(response);
@@ -48,7 +51,7 @@ public class MakeOrderTest {
     public void makeOrderWithoutToken(){
 
         //создание заказа
-        ValidatableResponse response = orderClient.makeOrderWithoutToken(orderGenerator.genericRandomOrder());
+        ValidatableResponse response = orderClient.makeOrderWithoutToken(orderGenerator.getListOfIngredients());
 
         //проверка успешного создания
         orderCheck.makeOrderWithoutToken(response);
@@ -95,9 +98,47 @@ public class MakeOrderTest {
 
     }
 
+    @Test
+    public void makeOrderSuccessfullyTest(){
 
+        //авторизация
+        LoginUser loginUser = userGenerator.genericLogin();
+        ValidatableResponse response = userClient.login(loginUser);
 
+        userCheck.loggedInSuccessfully(response, loginUser);
 
+        //получение токена доступа
+        accessToken = userCheck.getValidAccessToken(userClient.login(loginUser));
 
+        //получение данных о текущем состоянии всех заказов по всем пользователям и по текущему
+        int allTotal = orderClient.getAllUsersOrders().getTotal();
+        int allTotalToday = orderClient.getAllUsersOrders().getTotalToday();
 
+        int userTotal = orderClient.getOrders(accessToken).getTotal();
+        int userTotalToday = orderClient.getOrders(accessToken).getTotalToday();
+
+        Ingredients newOrderIngredients = orderGenerator.getListOfIngredients();
+
+        //создание заказа
+        response = orderClient.makeOrder(accessToken, newOrderIngredients);
+        //TODO проверять ответ в заказе (расписать еще один класс)
+        //response.body().as(UserOrders.class);
+
+        //проверка успешного создания
+        orderCheck.orderMadeSuccessfully(response);
+
+        UserOrders allUsersOrders = orderClient.getAllUsersOrders();
+
+        //проверка, что общее количество заказов увеличено и новый заказ создан с нужными ингредиентами
+        Assert.assertEquals(allTotal+1, allUsersOrders.getTotal());
+        Assert.assertEquals(allTotalToday+1, allUsersOrders.getTotalToday());
+        Assert.assertEquals(newOrderIngredients.getIngredients(), allUsersOrders.getOrders().get(0).getIngredients());
+
+        //заказ отображается в заказах текущего пользователя
+        UserOrders currentUserOrders = orderClient.getOrders(accessToken);
+        Assert.assertEquals(userTotal+1, currentUserOrders.getTotal());
+        Assert.assertEquals(userTotalToday+1, currentUserOrders.getTotalToday());
+        Assert.assertEquals(newOrderIngredients.getIngredients(), currentUserOrders.getOrders().get(currentUserOrders.getOrders().size()-1).getIngredients());
+
+    }
 }
