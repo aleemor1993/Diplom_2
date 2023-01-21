@@ -1,5 +1,6 @@
 package user;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.After;
 import org.junit.Assert;
@@ -23,8 +24,6 @@ public class DataChangeTest {
     private final String EXPIRED_TOKEN =
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzYmIxMzZiYzE2MWRhMDAxYjdhNWZiMCIsImlhdCI6MTY3MzIwNTMxMSwiZXhwIjoxNjczMjA2NTExfQ.VJ7RBlRdbH0_sDBHx3EXhdInrR4kOCD0SnzCA8iFyOc";
 
-    private final String INVALID_TOKEN = "Bearer 1";
-
     @Before
     public void registerUser(){
         RegisterUser registerUser = generator.random();
@@ -37,12 +36,14 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Успешное получение данных существующего пользователя")
     public void getUserInfoSuccessfully(){
 
         check.getAllUserInfoSuccessfully(client.getUserInfo(accessToken), loginUser.getEmail());
     }
 
     @Test
+    @DisplayName("Успешное изменение имени пользователя")
     public void changeNameSuccessfully(){
 
         ValidatableResponse response = client.changeUserInfoSuccessfully("name", accessToken, "Джон Лето Сноу Первый");
@@ -56,6 +57,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Успешное изменение пароля пользователя")
     public void changePasswordSuccessfully(){
 
         client.changeUserInfoSuccessfully("password", accessToken, "123456");
@@ -68,6 +70,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Успешное изменение email пользователя")
     public void changeEmailSuccessfully(){
 
         String newEmail = generator.getNewEmail(loginUser.getEmail());
@@ -84,6 +87,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение имени пользователя без авторизации")
     public void changeNameWithoutToken(){
 
         ValidatableResponse response = client.changeFieldWithoutToken("name", "Джон Лето Сноу Первый");
@@ -93,6 +97,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение email пользователя без авторизации")
     public void changeEmailWithoutToken(){
 
         ValidatableResponse response = client.changeFieldWithoutToken
@@ -103,6 +108,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение пароля пользователя без авторизации")
     public void changePasswordWithoutToken(){
 
         ValidatableResponse response = client.changeFieldWithoutToken("password", "555555");
@@ -112,6 +118,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение имени пользователя с истекшим токеном")
     public void changeNameWithExpiredToken(){
 
         ValidatableResponse response = client.changeUserInfoSuccessfully
@@ -122,6 +129,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение email пользователя с истекшим токеном")
     public void changeEmailWithExpiredToken(){
 
         ValidatableResponse response = client.changeUserInfoSuccessfully
@@ -132,6 +140,7 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение пароля пользователя с истекшим токеном")
     public void changePasswordWithExpiredToken(){
 
         ValidatableResponse response = client.changeUserInfoSuccessfully
@@ -142,8 +151,10 @@ public class DataChangeTest {
     }
 
     @Test
+    @DisplayName("Изменение имени пользователя с невалидным токеном")
     public void changeNameWithInvalidToken(){
 
+        String INVALID_TOKEN = "Bearer 1";
         ValidatableResponse response = client.changeUserInfoSuccessfully
                 ("name", INVALID_TOKEN, "Джон Лето Сноу Первый");
 
@@ -151,12 +162,14 @@ public class DataChangeTest {
 
     }
 
-
     @After
-    public void deleteUser(){
+    public void deleteUser() throws InterruptedException {
 
         ValidatableResponse response = client.deleteUserSuccessfully(accessToken, loginUser.getEmail());
         check.deleteUserSuccessfully(response);
+
+        //задержка после выполнения во избежание too many requests
+        Thread.sleep(1000);
 
     }
 

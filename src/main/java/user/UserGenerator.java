@@ -21,6 +21,15 @@ public class UserGenerator {
         return new LoginUser("johnnletit169snow@yandex.ru", "111111");
     }
 
+    public LoginUser emptyOrdersLogin(){
+
+        return new LoginUser("johnnletit170snow@yandex.ru", "111111");
+    }
+
+    public static String genericEmail(){
+        return "johnnletit169snow@yandex.ru";
+    }
+
     public String getNewEmail(String email) {
 
         return email + new Random().nextInt(200);

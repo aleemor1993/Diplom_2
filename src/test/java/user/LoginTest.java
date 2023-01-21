@@ -1,5 +1,6 @@
 package user;
 
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import org.junit.Test;
 import user.requests.LoginUser;
@@ -14,6 +15,7 @@ public class LoginTest {
 
 
     @Test
+    @DisplayName("Успешная авторизация существующего пользователя")
     public void loggedInSuccessfully(){
 
         LoginUser loginUser = generator.genericLogin();
@@ -24,6 +26,7 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Авторизация с неверным паролем")
     public void loggedInWithWrongPassword(){
 
         LoginUser loginUser = generator.genericLogin();
@@ -35,6 +38,7 @@ public class LoginTest {
     }
 
     @Test
+    @DisplayName("Авторизация с несуществующим email")
     public void loggedInWithWrongEmail(){
 
         LoginUser loginUser = generator.genericLogin();
@@ -43,6 +47,5 @@ public class LoginTest {
 
         check.loggedInUnsuccessfully(response);
     }
-
 
 }

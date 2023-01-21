@@ -4,6 +4,7 @@ import io.restassured.response.ValidatableResponse;
 
 import static constants.StatusCodes.*;
 import static org.hamcrest.CoreMatchers.*;
+import static user.UserGenerator.genericEmail;
 
 public class OrderAssertions {
 
@@ -11,7 +12,9 @@ public class OrderAssertions {
 
         response.log().all().assertThat().body("success", equalTo(true))
                 .and().body("order.number", notNullValue())
+                .and().body("order._id", notNullValue())
                 .and().body("order.status", equalTo("done"))
+                .and().body("order.owner.email", equalTo(genericEmail()))
                 .and().statusCode(OK);
 
     }
@@ -42,6 +45,7 @@ public class OrderAssertions {
 
         response.log().all().assertThat().body("success", equalTo(true))
                 .and().body(containsString("orders"))
+                .and().body("orders._id", notNullValue())
                 .and().statusCode(OK);
 
     }
