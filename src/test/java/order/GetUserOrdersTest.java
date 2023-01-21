@@ -2,6 +2,7 @@ package order;
 
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Test;
 import user.UserAssertions;
 import user.UserClient;
@@ -83,6 +84,14 @@ public class GetUserOrdersTest {
 
         //проверка ошибки получения
         orderCheck.getUserOrdersWithoutToken(response);
+    }
+
+    @After
+    public void waitFor() throws InterruptedException {
+
+        //задержка после выполнения во избежание too many requests
+        Thread.sleep(2000);
+
     }
 
 

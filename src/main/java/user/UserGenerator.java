@@ -12,7 +12,7 @@ public class UserGenerator {
     }
 
     public RegisterUser random(){
-        return new RegisterUser("johnnletit" + new Random().nextInt(200) + "snow@yandex.ru",
+        return new RegisterUser("johnletit" + new Random().nextInt(200) + "snow@yandex.ru",
                 "111111", "Джон Лето Сноу");
     }
 

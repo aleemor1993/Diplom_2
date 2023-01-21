@@ -4,6 +4,7 @@ import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
 import order.requests.Ingredients;
 import order.responses.orders.get.UserOrders;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import user.UserAssertions;
@@ -124,6 +125,14 @@ public class MakeOrderTest {
 
         //проверка ошибки создания
         orderCheck.makeOrderWithWrongHash(response);
+
+    }
+
+    @After
+    public void waitFor() throws InterruptedException {
+
+        //задержка после выполнения во избежание too many requests
+        Thread.sleep(3000);
 
     }
 }

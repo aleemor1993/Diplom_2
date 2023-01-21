@@ -2,6 +2,7 @@ package user;
 
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.ValidatableResponse;
+import org.junit.After;
 import org.junit.Test;
 import user.requests.LoginUser;
 
@@ -46,6 +47,14 @@ public class LoginTest {
         ValidatableResponse response = client.login(loginUser);
 
         check.loggedInUnsuccessfully(response);
+    }
+
+    @After
+    public void waitFor() throws InterruptedException {
+
+        //задержка после выполнения во избежание too many requests
+        Thread.sleep(2000);
+
     }
 
 }

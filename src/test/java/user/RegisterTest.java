@@ -124,7 +124,7 @@ public class RegisterTest {
     public void afterTests() throws InterruptedException {
 
         //отсрочка запуска тестов во избежание Too many requests
-        Thread.sleep(1000);
+        Thread.sleep(2000);
 
         //удаление зарегистрированного пользователя при успешной регистрации
         if (registered){

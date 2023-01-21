@@ -169,7 +169,7 @@ public class DataChangeTest {
         check.deleteUserSuccessfully(response);
 
         //задержка после выполнения во избежание too many requests
-        Thread.sleep(1000);
+        Thread.sleep(3500);
 
     }
 
