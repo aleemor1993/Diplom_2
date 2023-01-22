@@ -15,13 +15,6 @@ public class OrderGenerator {
         return new Ingredients(order);
     }
 
-    public Ingredients genericWrongHashOrder(){
-
-        List<String> order = new ArrayList<>();
-        order.add("5");
-        return new Ingredients(order);
-    }
-
     //получение списка валидных ингредиентов для бургера через запрос к ручке /api/ingredients
     public Ingredients getListOfIngredients(){
 
@@ -30,27 +23,16 @@ public class OrderGenerator {
         IngredientsList ingredientsList = orderClient.getIngredients();
 
         List<String> ing = new ArrayList<>();
-
-        int bun = 0;
-        int main = 0;
-        int sauce = 0;
+        List<String> types = new ArrayList<>();
 
         //добавление 3х валидных ингредиентов для бургера из ответа
         for (Ingredient ingredients: ingredientsList.getData()){
 
-            if ("bun".equals(ingredients.getType()) && bun == 0){
+            if (!types.contains(ingredients.getType())){
+                types.add(ingredients.getType());
                 ing.add(ingredients.get_id());
-                bun += 1;
             }
-            if ("main".equals(ingredients.getType()) && main == 0){
-                ing.add(ingredients.get_id());
-                main += 1;
-            }
-            if ("sauce".equals(ingredients.getType()) && sauce == 0){
-                ing.add(ingredients.get_id());
-                sauce += 1;
-            }
-            if (bun > 0 && main > 0 && sauce > 0) break;
+            if (ing.size() == 3) break;
         }
 
         return new Ingredients(ing);

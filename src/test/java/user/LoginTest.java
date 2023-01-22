@@ -53,7 +53,7 @@ public class LoginTest {
     public void waitFor() throws InterruptedException {
 
         //задержка после выполнения во избежание too many requests
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
     }
 

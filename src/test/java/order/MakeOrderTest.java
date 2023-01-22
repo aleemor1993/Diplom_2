@@ -12,6 +12,9 @@ import user.UserClient;
 import user.UserGenerator;
 import user.requests.LoginUser;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MakeOrderTest {
 
     private final UserClient userClient = new UserClient();
@@ -74,8 +77,8 @@ public class MakeOrderTest {
 
 
     @Test
-    @DisplayName("Создание заказа пользователя без токена")
-    public void makeOrderWithoutToken(){
+    @DisplayName("Создание заказа неавторизованным пользователем (без токена)")
+    public void makeOrderByUnauthorizedUser(){
 
         //кейс некорректный, поскольку сделать заказ без авторизации должно быть нельзя, но соответствует требуемой документации API
         //создание заказа
@@ -121,7 +124,9 @@ public class MakeOrderTest {
         accessToken = userCheck.getValidAccessToken(userClient.login(loginUser));
 
         //создание заказа
-        response = orderClient.makeOrder(accessToken, orderGenerator.genericWrongHashOrder());
+        List<String> order = new ArrayList<>();
+        order.add("5");
+        response = orderClient.makeOrder(accessToken, new Ingredients(order));
 
         //проверка ошибки создания
         orderCheck.makeOrderWithWrongHash(response);
@@ -132,7 +137,7 @@ public class MakeOrderTest {
     public void waitFor() throws InterruptedException {
 
         //задержка после выполнения во избежание too many requests
-        Thread.sleep(3000);
+        Thread.sleep(3500);
 
     }
 }

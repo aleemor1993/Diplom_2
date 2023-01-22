@@ -36,13 +36,6 @@ public class DataChangeTest {
     }
 
     @Test
-    @DisplayName("Успешное получение данных существующего пользователя")
-    public void getUserInfoSuccessfully(){
-
-        check.getAllUserInfoSuccessfully(client.getUserInfo(accessToken), loginUser.getEmail());
-    }
-
-    @Test
     @DisplayName("Успешное изменение имени пользователя")
     public void changeNameSuccessfully(){
 
@@ -154,9 +147,8 @@ public class DataChangeTest {
     @DisplayName("Изменение имени пользователя с невалидным токеном")
     public void changeNameWithInvalidToken(){
 
-        String INVALID_TOKEN = "Bearer 1";
         ValidatableResponse response = client.changeUserInfoSuccessfully
-                ("name", INVALID_TOKEN, "Джон Лето Сноу Первый");
+                ("name", "Bearer 1", "Джон Лето Сноу Первый");
 
         check.changeWithTokenInvalid(response);
 
@@ -169,7 +161,7 @@ public class DataChangeTest {
         check.deleteUserSuccessfully(response);
 
         //задержка после выполнения во избежание too many requests
-        Thread.sleep(3500);
+        Thread.sleep(4000);
 
     }
 

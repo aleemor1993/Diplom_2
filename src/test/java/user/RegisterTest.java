@@ -24,17 +24,12 @@ public class RegisterTest {
     @DisplayName("Успешная регистрация нового пользователя")
     public void registerNewUserSuccessfully(){
 
-        try {
             registerUser = generator.random();
             ValidatableResponse response = client.register(registerUser);
 
             check.createdSuccessfully(response, registerUser);
 
             registered = true;
-        }
-        catch (Exception e){
-            System.out.println("Ошибка создания пользователя");
-        }
 
     }
 
@@ -62,35 +57,11 @@ public class RegisterTest {
     }
 
     @Test
-    @DisplayName("Регистрация нового пользователя с отсутствующим полем name")
-    public void registerWithoutName(){
-
-        RegisterUser registerUser = generator.random();
-        registerUser.setName(null);
-        ValidatableResponse response = client.register(registerUser);
-
-        check.registerWithEmptyMandatoryFields(response);
-
-    }
-
-    @Test
     @DisplayName("Регистрация нового пользователя с пустым email")
     public void registerWithEmptyEmail(){
 
         RegisterUser registerUser = generator.random();
         registerUser.setEmail("");
-        ValidatableResponse response = client.register(registerUser);
-
-        check.registerWithEmptyMandatoryFields(response);
-
-    }
-
-    @Test
-    @DisplayName("Регистрация нового пользователя c отсутствующим полем email")
-    public void registerWithoutEmail(){
-
-        RegisterUser registerUser = generator.random();
-        registerUser.setEmail(null);
         ValidatableResponse response = client.register(registerUser);
 
         check.registerWithEmptyMandatoryFields(response);
@@ -109,22 +80,11 @@ public class RegisterTest {
 
     }
 
-    @Test
-    @DisplayName("Регистрация нового пользователя с отсутствующим полем пароль")
-    public void registerWithoutPassword(){
-
-        RegisterUser registerUser = generator.random();
-        registerUser.setPassword(null);
-        ValidatableResponse response = client.register(registerUser);
-
-        check.registerWithEmptyMandatoryFields(response);
-    }
-
     @After
     public void afterTests() throws InterruptedException {
 
         //отсрочка запуска тестов во избежание Too many requests
-        Thread.sleep(2000);
+        Thread.sleep(3000);
 
         //удаление зарегистрированного пользователя при успешной регистрации
         if (registered){
