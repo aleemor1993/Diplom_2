@@ -15,6 +15,8 @@ import user.requests.LoginUser;
 import java.util.ArrayList;
 import java.util.List;
 
+import static order.OrderGenerator.WRONG_HASH;
+
 public class MakeOrderTest {
 
     private final UserClient userClient = new UserClient();
@@ -125,7 +127,7 @@ public class MakeOrderTest {
 
         //создание заказа
         List<String> order = new ArrayList<>();
-        order.add("5");
+        order.add(WRONG_HASH);
         response = orderClient.makeOrder(accessToken, new Ingredients(order));
 
         //проверка ошибки создания

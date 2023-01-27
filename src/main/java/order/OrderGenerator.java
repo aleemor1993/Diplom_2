@@ -9,6 +9,8 @@ import java.util.List;
 
 public class OrderGenerator {
 
+    public static final String WRONG_HASH = "5";
+
     public Ingredients genericEmptyOrder(){
 
         List<String> order = new ArrayList<>();
